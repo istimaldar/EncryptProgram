@@ -2,13 +2,10 @@ package com.istimaldar.encryptprogram.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.istimaldar.encryptprogram.EncryptActivity;
-import com.istimaldar.encryptprogram.Retrievable;
+import com.istimaldar.encryptprogram.view.Retrievable;
 
 /**
  * Created by Istimaldar on 02.12.2016.
@@ -27,11 +24,13 @@ public class Controller {
 
     public void showActivity(Activity current, Class window) {
         Intent intent = new Intent(current, window);
-        int action = 0;
+        int action = 0, source = 0;
         if (current instanceof Retrievable) {
-            action = ((Retrievable) current).retrieve();
+            action = ((Retrievable) current).retrieve(Storage.ACTION);
+            source = ((Retrievable) current).retrieve(Storage.SOURCE);
         }
         intent.putExtra(Storage.ACTION, action);
+        intent.putExtra(Storage.SOURCE, source);
         current.startActivity(intent);
         current.finish();
     }
@@ -45,6 +44,15 @@ public class Controller {
         spinner.setPrompt("Title");
         spinner.setSelection(var);
         return spinner;
+    }
+
+    public void changeSpinner(Spinner spinner, Activity parrent, String[]list, int var) {
+        ArrayAdapter<String> sourceAdapter = new ArrayAdapter<>(parrent,
+                android.R.layout.simple_spinner_item, list);
+        sourceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(sourceAdapter);
+        spinner.setPrompt("Title");
+        spinner.setSelection(var);
     }
 
 }
